@@ -1,16 +1,20 @@
 package io.github.nosequel.menu;
 
 import io.github.nosequel.menu.buttons.Button;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.logging.Level;
 
+@Getter
 public abstract class Menu {
 
     private final Player player;
@@ -93,6 +97,15 @@ public abstract class Menu {
     }
 
     /**
+     * Redirect the player's menu to a new menu
+     *
+     * @param menu the menu to redirect it to
+     */
+    public void redirect(Menu menu) {
+        menu.updateMenu();
+    }
+
+    /**
      * Clear player's currently open inventory
      * <p>
      * This is a loop which loops through 0 -> this.size,
@@ -107,4 +120,27 @@ public abstract class Menu {
             }
         }
     }
+
+    /**
+     * Handle clicking on a button
+     *
+     * @param event the event called
+     */
+    public void click(InventoryClickEvent event) {
+        for (Button button : this.getButtons()) {
+            if(button.getIndex() == event.getSlot() && button.getClickAction() != null) {
+                button.getClickAction().accept(event);
+            }
+        }
+    }
+
+    /**
+     * Handle the player closing the inventory
+     *
+     * @param event the event called
+     */
+    public void handleClose(InventoryCloseEvent event) {
+        MenuHandler.getInstance().unregister((Player) event.getPlayer());
+    }
+
 }

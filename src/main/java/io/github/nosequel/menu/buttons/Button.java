@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public abstract class Button {
+public abstract class Button implements Cloneable {
 
     /**
      * Get the index of the button.
@@ -56,13 +56,63 @@ public abstract class Button {
         return event -> event.setCancelled(true);
     }
 
+    @Override
+    public Button clone() {
+        return new Button() {
+            @Override
+            public int getIndex() {
+                return Button.this.getIndex();
+            }
+
+            @Override
+            public Material getMaterial() {
+                return Button.this.getMaterial();
+            }
+
+            @Override
+            public String getDisplayName() {
+                return Button.this.getDisplayName();
+            }
+
+            @Override
+            public String[] getLore() {
+                return Button.this.getLore();
+            }
+
+            @Override
+            public Consumer<InventoryClickEvent> getClickAction() {
+                return Button.this.getClickAction();
+            }
+
+            @Override
+            public byte getData() {
+                return Button.this.getData();
+            }
+
+            @Override
+            public ItemStack toItemStack() {
+                return Button.this.toItemStack();
+            }
+        };
+    }
+
+    /**
+     * Get the data of the material
+     * to display in the inventory.
+     *
+     * @return the data
+     */
+    public byte getData() {
+        return 0;
+    }
+
     /**
      * Convert the button into an {@link ItemStack}.
      *
      * @return the newly created item stack
      */
     public ItemStack toItemStack() {
-        final ItemStack item = new ItemStack(this.getMaterial());
+        final ItemStack item = new ItemStack(this.getMaterial(), this.getData());
         final ItemMeta meta = item.getItemMeta();
 
         if(meta != null) {
