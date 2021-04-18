@@ -1,5 +1,8 @@
 package io.github.nosequel.menu.buttons;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -10,100 +13,30 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public abstract class Button implements Cloneable {
+@Builder
+@Getter
+@Setter
+public abstract class Button {
+
+    private int index;
+    private final Material material;
+
+    private String displayName;
+    private String[] lore;
+
+    private Consumer<InventoryClickEvent> clickAction = event -> event.setCancelled(true);
+
+    private int amount = 1;
+    private byte data = 0;
 
     /**
-     * Get the index of the button.
      *
-     * @return the index slot
+     * @param index    the display slot of the button
+     * @param material the icon of the button
      */
-    public abstract int getIndex();
-
-    /**
-     * Get the material of the button to
-     * display in the menu.
-     *
-     * @return the type of the material
-     */
-    public abstract Material getMaterial();
-
-    /**
-     * Get the string to set the display name
-     * of the item in the menu to.
-     *
-     * @return the display name
-     */
-    public abstract String getDisplayName();
-
-    /**
-     * Get the string array to set the lore
-     * of the item in the menu to.
-     *
-     * @return the lore
-     */
-    public abstract String[] getLore();
-
-    /**
-     * Get the click action of the button.
-     * <p>
-     * This will be called whenever the
-     * player clicks the button inside of
-     * the inventory.
-     *
-     * @return the click action to call
-     */
-    public Consumer<InventoryClickEvent> getClickAction() {
-        return event -> event.setCancelled(true);
-    }
-
-    @Override
-    public Button clone() {
-        return new Button() {
-            @Override
-            public int getIndex() {
-                return Button.this.getIndex();
-            }
-
-            @Override
-            public Material getMaterial() {
-                return Button.this.getMaterial();
-            }
-
-            @Override
-            public String getDisplayName() {
-                return Button.this.getDisplayName();
-            }
-
-            @Override
-            public String[] getLore() {
-                return Button.this.getLore();
-            }
-
-            @Override
-            public Consumer<InventoryClickEvent> getClickAction() {
-                return Button.this.getClickAction();
-            }
-
-            @Override
-            public byte getData() {
-                return Button.this.getData();
-            }
-
-            @Override
-            public ItemStack toItemStack() {
-                return Button.this.toItemStack();
-            }
-        };
-    }
-
-    /**
-     * Get the data of the material
-     * to display in the inventory.
-     *
-     * @return the data
-     */
-    public byte getData() {
-        return 0;
+    public Button(int index, Material material) {
+        this.material = material;
+        this.index = index;
     }
 
     /**
@@ -112,7 +45,7 @@ public abstract class Button implements Cloneable {
      * @return the newly created item stack
      */
     public ItemStack toItemStack() {
-        final ItemStack item = new ItemStack(this.getMaterial(), this.getData());
+        final ItemStack item = new ItemStack(this.getMaterial(), this.getAmount(), this.getData());
         final ItemMeta meta = item.getItemMeta();
 
         if(meta != null) {

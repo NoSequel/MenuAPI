@@ -89,9 +89,14 @@ public abstract class PaginatedMenu extends Menu {
         final List<Button> buttons = new ArrayList<>();
         final int scaledSize = this.getSize() - 9;
 
-        for(Button button : this.getButtons()) {
-            if(button.getIndex() >= (page * scaledSize) && button.getIndex() <= (page * scaledSize) + 1) {
-                buttons.add(button); // todo: set index of button!!!
+        for (Button button : this.getButtons()) {
+            if (button.getIndex() >= (page * scaledSize) && button.getIndex() <= (page * scaledSize) + 1) {
+                buttons.add(Button.builder()
+                        .index(button.getIndex() - (scaledSize * (page - 1))).material(button.getMaterial())
+                        .lore(button.getLore()).clickAction(button.getClickAction())
+                        .displayName(button.getDisplayName()).data(button.getData())
+                        .build()
+                );
             }
         }
 
