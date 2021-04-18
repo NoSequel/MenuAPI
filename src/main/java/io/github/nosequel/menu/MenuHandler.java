@@ -1,5 +1,6 @@
 package io.github.nosequel.menu;
 
+import io.github.nosequel.menu.listener.MenuListener;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,6 +20,8 @@ public class MenuHandler {
      */
     public MenuHandler(JavaPlugin plugin) {
         instance = this;
+
+        plugin.getServer().getPluginManager().registerEvents(new MenuListener(this), plugin);
     }
 
     /**

@@ -19,6 +19,7 @@ import java.util.List;
 public abstract class PaginatedMenu extends Menu {
 
     private ItemStack paginationButtonType = new ItemStack(Material.RED_CARPET);
+    private NavigationPosition navigationPosition = NavigationPosition.TOP;
     private int page = 1;
 
     /**
@@ -87,7 +88,7 @@ public abstract class PaginatedMenu extends Menu {
      */
     public List<Button> getButtonsInRange() {
         final List<Button> buttons = new ArrayList<>();
-        final int scaledSize = this.getSize() - 9;
+        final int scaledSize = this.getSize() + this.navigationPosition.getButtonIndexIncrementation();
 
         for (Button button : this.getButtons()) {
             if (button.getIndex() >= (page * scaledSize) && button.getIndex() <= (page * scaledSize) + 1) {
