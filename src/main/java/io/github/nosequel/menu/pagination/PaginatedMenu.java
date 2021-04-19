@@ -2,8 +2,6 @@ package io.github.nosequel.menu.pagination;
 
 import io.github.nosequel.menu.Menu;
 import io.github.nosequel.menu.buttons.Button;
-import io.github.nosequel.menu.pagination.navigation.NextPageButton;
-import io.github.nosequel.menu.pagination.navigation.PreviousPageButton;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Material;
@@ -12,6 +10,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -115,9 +114,6 @@ public abstract class PaginatedMenu extends Menu {
      * @return the list of buttons
      */
     public List<Button> getNavigationBar() {
-        return new ArrayList<Button>() {{
-            add(new NextPageButton(PaginatedMenu.this));
-            add(new PreviousPageButton(PaginatedMenu.this));
-        }};
+        return Arrays.asList(this.navigationPosition.getNavigationButtons(this).clone());
     }
 }

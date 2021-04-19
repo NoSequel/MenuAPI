@@ -11,8 +11,8 @@ public class PreviousPageButton extends Button {
 
     private final PaginatedMenu menu;
 
-    public PreviousPageButton(PaginatedMenu menu) {
-        super(0, menu.getPaginationButtonType().getType());
+    public PreviousPageButton(int index, PaginatedMenu menu) {
+        super(index, menu.getPaginationButtonType().getType());
         this.menu = menu;
         this.setDisplayName("&aPrevious Page");
     }

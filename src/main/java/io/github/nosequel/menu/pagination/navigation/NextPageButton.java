@@ -11,8 +11,8 @@ public class NextPageButton extends Button {
 
     private final PaginatedMenu menu;
 
-    public NextPageButton(PaginatedMenu menu) {
-        super(8, menu.getPaginationButtonType().getType());
+    public NextPageButton(int index, PaginatedMenu menu) {
+        super(index, menu.getPaginationButtonType().getType());
         this.menu = menu;
         this.setDisplayName("&aNext Page");
     }
@@ -29,7 +29,7 @@ public class NextPageButton extends Button {
     @Override
     public Consumer<InventoryClickEvent> getClickAction() {
         return event -> {
-            menu.navigatePrevious();
+            menu.navigateNext();
             event.setCancelled(true);
         };
     }

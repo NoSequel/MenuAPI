@@ -13,6 +13,14 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+/**
+ * No clue if I'm doing this correctly,
+ * I've never used a @Builder annotation for a
+ * class before, and it looks rather gay (not homophobic.)
+ *
+ * I'll make my own builder methods whenever I'm not lazy.
+ * @author NV6
+ */
 @Builder
 @Getter
 @Setter
