@@ -1,8 +1,6 @@
 package io.github.nosequel.menu.buttons;
 
-import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -13,18 +11,8 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-/**
- * No clue if I'm doing this correctly,
- * I've never used a @Builder annotation for a
- * class before, and it looks rather gay (not homophobic.)
- *
- * I'll make my own builder methods whenever I'm not lazy.
- * @author NV6
- */
-@Builder
 @Getter
-@Setter
-public abstract class Button {
+public class Button implements Cloneable {
 
     private int index;
     private final Material material;
@@ -38,13 +26,88 @@ public abstract class Button {
     private byte data = 0;
 
     /**
-     *
      * @param index    the display slot of the button
      * @param material the icon of the button
      */
     public Button(int index, Material material) {
         this.material = material;
         this.index = index;
+    }
+
+    @Override
+    public Button clone() {
+        return new Button(this.index, this.material)
+                .setDisplayName(this.getDisplayName())
+                .setAmount(this.getAmount())
+                .setClickAction(this.getClickAction())
+                .setLore(this.getLore())
+                .setData(this.getData());
+    }
+
+    /**
+     * Set the index of the button in the menu.
+     *
+     * @param index the index to set it to
+     * @return the current button instance
+     */
+    public Button setIndex(int index) {
+        this.index = index;
+        return this;
+    }
+
+    /**
+     * Set the display name of the button in the menu.
+     *
+     * @param displayName the display name to set it to
+     * @return the current button instance
+     */
+    public Button setDisplayName(String displayName) {
+        this.displayName = displayName;
+        return this;
+    }
+
+    /**
+     * Set the lore of the button in the menu.
+     *
+     * @param lore the lore to set it to
+     * @return the current button instance
+     */
+    public Button setLore(String[] lore) {
+        this.lore = lore;
+        return this;
+    }
+
+    /**
+     * Set the click action of the button in the menu.
+     *
+     * @param clickAction the click action to set it to
+     * @return the current button instance
+     */
+    public Button setClickAction(Consumer<InventoryClickEvent> clickAction) {
+        this.clickAction = clickAction;
+        return this;
+    }
+
+    /**
+     * Set the amount of the item stack of the button in the menu.
+     *
+     * @param amount the amount to set it to
+     * @return the current button instance
+     */
+    public Button setAmount(int amount) {
+        this.amount = amount;
+        return this;
+    }
+
+    /**
+     * Set the item stack data of the button in the menu.
+     *
+     * @param data the itemstack data to set it to
+     * @return the current button instance
+     */
+    public Button setData(byte data) {
+        this.data = data;
+        return this;
     }
 
     /**
@@ -56,7 +119,7 @@ public abstract class Button {
         final ItemStack item = new ItemStack(this.getMaterial(), this.getAmount(), this.getData());
         final ItemMeta meta = item.getItemMeta();
 
-        if(meta != null) {
+        if (meta != null) {
             if (this.getDisplayName() != null) {
                 meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', this.getDisplayName()));
             }

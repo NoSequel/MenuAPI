@@ -4,6 +4,7 @@ import io.github.nosequel.menu.Menu;
 import io.github.nosequel.menu.buttons.Button;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -17,8 +18,11 @@ import java.util.List;
 @Setter
 public abstract class PaginatedMenu extends Menu {
 
-    private ItemStack paginationButtonType = new ItemStack(Material.RED_CARPET);
+    private ItemStack paginationButtonType = new ItemStack(Material.CARPET, 1, DyeColor.GREEN.getWoolData());
     private NavigationPosition navigationPosition = NavigationPosition.TOP;
+
+    private boolean fillNavBar = true;
+
     private int page = 1;
 
     /**
@@ -86,23 +90,7 @@ public abstract class PaginatedMenu extends Menu {
      * @return the list of buttons
      */
     public List<Button> getButtonsInRange() {
-        final List<Button> buttons = new ArrayList<>();
-        final int scaledSize = this.getSize() + this.navigationPosition.getButtonIndexIncrementation();
-
-        for (Button button : this.getButtons()) {
-            if (button.getIndex() >= (page * scaledSize) && button.getIndex() <= (page * scaledSize) + 1) {
-                buttons.add(Button.builder()
-                        .index(button.getIndex() - (scaledSize * (page - 1))).material(button.getMaterial())
-                        .lore(button.getLore()).clickAction(button.getClickAction())
-                        .displayName(button.getDisplayName()).data(button.getData())
-                        .build()
-                );
-            }
-        }
-
-        buttons.addAll(this.getNavigationBar());
-
-        return buttons;
+        return this.navigationPosition.getButtonsInRange(this.getButtons(), this);
     }
 
     /**
