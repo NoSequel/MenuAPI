@@ -1,9 +1,12 @@
 package io.github.nosequel.menu;
 
 import io.github.nosequel.menu.buttons.Button;
+import io.github.nosequel.menu.filling.FillingType;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -11,11 +14,15 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
 @Getter
+@Setter
 public abstract class Menu {
+
+    private final List<FillingType> fillers = new ArrayList<>();
 
     private final Player player;
     private final String title;
@@ -24,6 +31,9 @@ public abstract class Menu {
     // the inventory to use if the inventory already exists,
     // to avoid re-opening the inventory whenever updating.
     private Inventory inventory;
+
+    // the button type used for filling the inventory slots
+    private ItemStack fillerType = new ItemStack(Material.STAINED_GLASS_PANE, 1, DyeColor.BLACK.getData());
 
     /**
      * Constructor to make a new menu object
@@ -78,6 +88,16 @@ public abstract class Menu {
             }
         }
 
+        for (FillingType filler : this.fillers) {
+            for (Button button : filler.fillMenu(this, buttons)) {
+                if (button.getIndex() < this.size) {
+                    inventory.setItem(button.getIndex(), button.toItemStack());
+                } else {
+                    Bukkit.getLogger().log(Level.WARNING, "Button was not added to menu (index was higher than the menu size, index=" + button.getIndex() + ", size=" + this.size + ")");
+                }
+            }
+        }
+
         if(inventory != this.inventory) {
             this.player.closeInventory();
             this.player.openInventory(inventory);
@@ -103,6 +123,15 @@ public abstract class Menu {
      */
     public void redirect(Menu menu) {
         menu.updateMenu();
+    }
+
+    /**
+     * Add a new filler type to the list of fillers
+     *
+     * @param type the new type to add
+     */
+    public void addFiller(FillingType type) {
+        this.getFillers().add(type);
     }
 
     /**
@@ -142,5 +171,4 @@ public abstract class Menu {
     public void handleClose(InventoryCloseEvent event) {
         MenuHandler.getInstance().unregister((Player) event.getPlayer());
     }
-
 }
