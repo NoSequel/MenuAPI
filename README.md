@@ -93,6 +93,10 @@ new ExampleMenu(player).updateMenu();
 ### Configuring Menu Pagination
 ```java
 PaginatedMenu#setNavigationPosition(NavigationPosition)
-PaginatedMenu#setFillNavBar(Boolean)
 PaginatedMenu#setPaginationButtonType(ItemStack)
+```
+
+### Configuring Menu Filling
+```java
+Menu#addFiller(FillingType)
 ```
