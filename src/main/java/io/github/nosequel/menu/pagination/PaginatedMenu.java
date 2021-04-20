@@ -21,8 +21,6 @@ public abstract class PaginatedMenu extends Menu {
     private ItemStack paginationButtonType = new ItemStack(Material.CARPET, 1, DyeColor.GREEN.getWoolData());
     private NavigationPosition navigationPosition = NavigationPosition.TOP;
 
-    private boolean fillNavBar = true;
-
     private int page = 1;
 
     /**

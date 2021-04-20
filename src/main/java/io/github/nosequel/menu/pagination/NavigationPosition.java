@@ -5,8 +5,6 @@ import io.github.nosequel.menu.pagination.navigation.NextPageButton;
 import io.github.nosequel.menu.pagination.navigation.PreviousPageButton;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,15 +27,6 @@ public enum NavigationPosition {
                     new PreviousPageButton(0, menu),
                     new NextPageButton(8, menu)
             ));
-
-            if(menu.isFillNavBar()) {
-                for (int i = 1; i < 9; i++) {
-                    buttons.add(new Button(i, Material.STAINED_GLASS_PANE)
-                            .setData(DyeColor.BLACK.getData())
-                            .setDisplayName(" ")
-                    );
-                }
-            }
 
             return buttons.toArray(new Button[0]);
         }
@@ -88,15 +77,6 @@ public enum NavigationPosition {
                     new PreviousPageButton(menu.getSize() - 9, menu),
                     new NextPageButton(menu.getSize() - 1, menu)
             ));
-
-            if (menu.isFillNavBar()) {
-                for (int i = menu.getSize() - 8; i < menu.getSize() - 1; i++) {
-                    buttons.add(new Button(i, Material.STAINED_GLASS_PANE)
-                            .setData(DyeColor.BLACK.getData())
-                            .setDisplayName(" ")
-                    );
-                }
-            }
 
             return buttons.toArray(new Button[0]);
         }
