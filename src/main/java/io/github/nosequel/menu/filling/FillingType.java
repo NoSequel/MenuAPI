@@ -31,10 +31,8 @@ public enum FillingType {
                     }
                 }
 
-                if(applicableSlot) {
-                    if(i < 9 || i >= menu.getSize() - 9) {
-                        fillers.add(new Button(i, menu.getFillerType().getType()).setData(menu.getFillerType().getData().getData()));
-                    } else if(i % 9 == 0 || i % 9 == 1) {
+                if (applicableSlot) {
+                    if (i < 9 || i >= menu.getSize() - 9 || i % 9 == 0 || i % 8 == 0) {
                         fillers.add(new Button(i, menu.getFillerType().getType()).setData(menu.getFillerType().getData().getData()));
                     }
                 }
