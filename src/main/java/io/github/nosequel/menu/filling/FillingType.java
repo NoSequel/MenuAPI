@@ -28,7 +28,7 @@ public enum FillingType {
 
             for (int i = 0; i < menu.getSize() / 9; i++) {
                 fillers.add(new Button(i * 9, menu.getFillerType().getType()).setData(menu.getFillerType().getData().getData()));
-                fillers.add(new Button(i * 8 == 0 ? 8 : (i * 8) + i, menu.getFillerType().getType()).setData(menu.getFillerType().getData().getData()));
+                fillers.add(new Button(i * 8 == 0 ? 8 : (i * 8), menu.getFillerType().getType()).setData(menu.getFillerType().getData().getData()));
             }
 
             return fillers;
