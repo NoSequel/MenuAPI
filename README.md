@@ -1,6 +1,9 @@
 # Menu API
 This is a simplistic Menu API made for the Spigot API, with built-in pagination, actions, and more.
 
+# Note
+- Menu fillers are currently in development, and issues may occur.
+
 # Usage
 ## Registering the menu handler:
 You have to register the ``MenuHandler`` object somewhere, preferably inside of the main class, for example:
