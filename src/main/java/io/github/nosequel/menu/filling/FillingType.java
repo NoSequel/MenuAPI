@@ -21,14 +21,23 @@ public enum FillingType {
         public List<Button> fillMenu(Menu menu, List<Button> buttons) {
             final List<Button> fillers = new ArrayList<>();
 
-            for (int i = 0; i < 9; i++) {
-                fillers.add(new Button(i, menu.getFillerType().getType()).setData(menu.getFillerType().getData().getData()));
-                fillers.add(new Button(menu.getSize() - i, menu.getFillerType().getType()).setData(menu.getFillerType().getData().getData()));
-            }
+            for(int i = 0; i < menu.getSize(); i++) {
+                boolean applicableSlot = true;
 
-            for (int i = 0; i < menu.getSize() / 9; i++) {
-                fillers.add(new Button(i * 9, menu.getFillerType().getType()).setData(menu.getFillerType().getData().getData()));
-                fillers.add(new Button(i * 8 == 0 ? 8 : (i * 8), menu.getFillerType().getType()).setData(menu.getFillerType().getData().getData()));
+                for (Button button : buttons) {
+                    if (button.getIndex() == i) {
+                        applicableSlot = false;
+                        break;
+                    }
+                }
+
+                if(applicableSlot) {
+                    if(i < 9 || i >= menu.getSize() - 9) {
+                        fillers.add(new Button(i, menu.getFillerType().getType()).setData(menu.getFillerType().getData().getData()));
+                    } else if((i / 9) % 2 == 0 || (i / 8) % 2 == 0) {
+                        fillers.add(new Button(i, menu.getFillerType().getType()).setData(menu.getFillerType().getData().getData()));
+                    }
+                }
             }
 
             return fillers;
