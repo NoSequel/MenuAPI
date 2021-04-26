@@ -33,7 +33,11 @@ public enum FillingType {
 
                 if (applicableSlot) {
                     if (i < 9 || i >= menu.getSize() - 9 || i % 9 == 0 || i % 9 == 8) {
-                        fillers.add(new Button(i, menu.getFillerType().getType()).setData(menu.getFillerType().getData().getData()));
+                        fillers.add(new Button(i, menu.getFillerType().getType())
+                                .setData(menu.getFillerType().getData().getData())
+                                .setDisplayName(" ")
+                                .setClickAction(event -> event.setCancelled(true))
+                        );
                     }
                 }
             }
@@ -66,7 +70,11 @@ public enum FillingType {
                 }
 
                 if (applicableSlot) {
-                    fillers.add(new Button(i, menu.getFillerType().getType()).setData(menu.getFillerType().getData().getData()));
+                    fillers.add(new Button(i, menu.getFillerType().getType())
+                            .setData(menu.getFillerType().getData().getData())
+                            .setDisplayName(" ")
+                            .setClickAction(event -> event.setCancelled(true))
+                    );
                 }
             }
 

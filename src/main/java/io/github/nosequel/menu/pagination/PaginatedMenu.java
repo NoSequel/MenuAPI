@@ -77,8 +77,11 @@ public abstract class PaginatedMenu extends Menu {
         for (Button button : this.getButtonsInRange()) {
             if (button.getIndex() == event.getSlot() && button.getClickAction() != null) {
                 button.getClickAction().accept(event);
+                return;
             }
         }
+
+        event.setCancelled(true);
     }
 
     /**
