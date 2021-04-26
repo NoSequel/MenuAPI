@@ -159,8 +159,11 @@ public abstract class Menu {
         for (Button button : this.getButtons()) {
             if(button.getIndex() == event.getSlot() && button.getClickAction() != null) {
                 button.getClickAction().accept(event);
+                return;
             }
         }
+
+        event.setCancelled(true);
     }
 
     /**
