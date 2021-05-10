@@ -1,14 +1,8 @@
 package io.github.nosequel.menu.pagination;
 
 import io.github.nosequel.menu.buttons.Button;
-import io.github.nosequel.menu.pagination.navigation.NextPageButton;
-import io.github.nosequel.menu.pagination.navigation.PreviousPageButton;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Getter
@@ -23,12 +17,19 @@ public enum NavigationPosition {
          */
         @Override
         public Button[] getNavigationButtons(PaginatedMenu menu) {
-            final List<Button> buttons = new ArrayList<>(Arrays.asList(
-                    new PreviousPageButton(0, menu),
-                    new NextPageButton(8, menu)
-            ));
+            final Button[] buttons = new Button[9];
 
-            return buttons.toArray(new Button[0]);
+            buttons[0] = menu.getPreviousPageButton().setClickAction(event -> {
+                menu.navigatePrevious();
+                event.setCancelled(true);
+            });
+
+            buttons[8] = menu.getNextPageButton().setClickAction(event -> {
+                menu.navigateNext();
+                event.setCancelled(true);
+            });
+
+            return buttons;
         }
 
         /**
@@ -40,8 +41,8 @@ public enum NavigationPosition {
          * @return the buttons in range
          */
         @Override
-        public List<Button> getButtonsInRange(List<Button> buttons, PaginatedMenu menu) {
-            final List<Button> buttonList = new ArrayList<>();
+        public Button[] getButtonsInRange(Button[] buttons, PaginatedMenu menu) {
+            final Button[] returningButtons = new Button[menu.getSize()];
 
             final int size = menu.getSize();
             final int page = menu.getPage();
@@ -51,16 +52,25 @@ public enum NavigationPosition {
             final int start = ((page - 1) * maxElements);
             final int end = (start + maxElements) - 1;
 
-            for (Button button : buttons) {
-                if (button.getIndex() >= start && button.getIndex() <= end)
-                    buttonList.add(button.clone()
-                            .setIndex(button.getIndex() - ((maxElements * (page - 1))) + 9)
-                    );
+            for (int index = 0; index < buttons.length; index++) {
+                final Button button = buttons[index];
+
+                if (button != null && index >= start && index <= end) {
+                    returningButtons[index - ((maxElements) * (page - 1)) + 9] = button;
+                }
             }
 
-            buttonList.addAll(menu.getNavigationBar());
+            final Button[] navigationBar = menu.getNavigationBar();
 
-            return buttonList;
+            for (int index = 0; index < navigationBar.length; index++) {
+                final Button button = navigationBar[index];
+
+                if (button != null) {
+                    returningButtons[index] = button;
+                }
+            }
+
+            return returningButtons;
         }
     },
 
@@ -73,12 +83,19 @@ public enum NavigationPosition {
          */
         @Override
         public Button[] getNavigationButtons(PaginatedMenu menu) {
-            final List<Button> buttons = new ArrayList<>(Arrays.asList(
-                    new PreviousPageButton(menu.getSize() - 9, menu),
-                    new NextPageButton(menu.getSize() - 1, menu)
-            ));
+            final Button[] buttons = new Button[menu.getSize()];
 
-            return buttons.toArray(new Button[0]);
+            buttons[menu.getSize() - 9] = menu.getPreviousPageButton().setClickAction(event -> {
+                menu.navigatePrevious();
+                event.setCancelled(true);
+            });
+
+            buttons[menu.getSize() - 1] = menu.getNextPageButton().setClickAction(event -> {
+                menu.navigateNext();
+                event.setCancelled(true);
+            });
+
+            return buttons;
         }
 
         /**
@@ -90,8 +107,8 @@ public enum NavigationPosition {
          * @return the buttons in range
          */
         @Override
-        public List<Button> getButtonsInRange(List<Button> buttons, PaginatedMenu menu) {
-            final List<Button> buttonList = new ArrayList<>();
+        public Button[] getButtonsInRange(Button[] buttons, PaginatedMenu menu) {
+            final Button[] returningButtons = new Button[menu.getSize()];
 
             final int size = menu.getSize();
             final int page = menu.getPage();
@@ -101,16 +118,25 @@ public enum NavigationPosition {
             final int start = (page - 1) * maxElements;
             final int end = (start + maxElements) - 1;
 
-            for (Button button : buttons) {
-                if (button.getIndex() >= start && button.getIndex() <= end)
-                    buttonList.add(button.clone()
-                            .setIndex(button.getIndex() - ((maxElements * (page - 1))))
-                    );
+            for (int index = 0; index < buttons.length; index++) {
+                final Button button = buttons[index];
+
+                if (button != null && index >= start && index <= end) {
+                    returningButtons[index - ((maxElements) * (page - 1))] = button;
+                }
             }
 
-            buttonList.addAll(menu.getNavigationBar());
+            final Button[] navigationBar = menu.getNavigationBar();
 
-            return buttonList;
+            for (int index = 0; index < navigationBar.length; index++) {
+                final Button button = navigationBar[index];
+
+                if (button != null) {
+                    returningButtons[index] = button;
+                }
+            }
+
+            return returningButtons;
         }
     };
 
@@ -131,6 +157,6 @@ public enum NavigationPosition {
      * @param menu    the menu to get the data from
      * @return the buttons in range
      */
-    public abstract List<Button> getButtonsInRange(List<Button> buttons, PaginatedMenu menu);
+    public abstract Button[] getButtonsInRange(Button[] buttons, PaginatedMenu menu);
 
 }

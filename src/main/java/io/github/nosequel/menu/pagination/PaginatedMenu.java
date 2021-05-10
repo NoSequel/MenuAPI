@@ -4,15 +4,12 @@ import io.github.nosequel.menu.Menu;
 import io.github.nosequel.menu.buttons.Button;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Getter
 @Setter
@@ -20,6 +17,12 @@ public abstract class PaginatedMenu extends Menu {
 
     private ItemStack paginationButtonType = new ItemStack(Material.CARPET, 1, DyeColor.GREEN.getWoolData());
     private NavigationPosition navigationPosition = NavigationPosition.TOP;
+
+    private Button previousPageButton = new Button(Material.MELON)
+            .setDisplayName(ChatColor.GREEN + "Previous Page");
+
+    private Button nextPageButton = new Button(Material.MELON)
+            .setDisplayName(ChatColor.GREEN + "Next Page");
 
     private int page = 1;
 
@@ -74,14 +77,17 @@ public abstract class PaginatedMenu extends Menu {
      */
     @Override
     public void click(InventoryClickEvent event) {
-        for (Button button : this.getButtonsInRange()) {
-            if (button.getIndex() == event.getSlot() && button.getClickAction() != null) {
-                button.getClickAction().accept(event);
-                return;
-            }
+        final Button[] buttons = this.getButtonsInRange();
+        final Button button = buttons[event.getSlot()];
+
+        if (button == null) {
+            event.setCancelled(true);
+            return;
         }
 
-        event.setCancelled(true);
+        if (button.getClickAction() != null) {
+            button.getClickAction().accept(event);
+        }
     }
 
     /**
@@ -90,7 +96,7 @@ public abstract class PaginatedMenu extends Menu {
      *
      * @return the list of buttons
      */
-    public List<Button> getButtonsInRange() {
+    public Button[] getButtonsInRange() {
         return this.navigationPosition.getButtonsInRange(this.getButtons(), this);
     }
 
@@ -102,7 +108,7 @@ public abstract class PaginatedMenu extends Menu {
      *
      * @return the list of buttons
      */
-    public List<Button> getNavigationBar() {
-        return Arrays.asList(this.navigationPosition.getNavigationButtons(this).clone());
+    public Button[] getNavigationBar() {
+        return this.navigationPosition.getNavigationButtons(this).clone();
     }
 }

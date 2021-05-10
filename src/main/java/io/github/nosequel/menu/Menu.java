@@ -2,6 +2,7 @@ package io.github.nosequel.menu;
 
 import io.github.nosequel.menu.buttons.Button;
 import io.github.nosequel.menu.filling.FillingType;
+import io.github.nosequel.menu.type.MenuType;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -16,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 @Getter
 @Setter
@@ -28,9 +28,13 @@ public abstract class Menu {
     private final String title;
     private final int size;
 
+    private final Button[] buttons;
+
     // the inventory to use if the inventory already exists,
     // to avoid re-opening the inventory whenever updating.
     private Inventory inventory;
+
+    private MenuType menuType = MenuType.INVENTORY;
 
     // the button type used for filling the inventory slots
     private ItemStack fillerType = new ItemStack(Material.STAINED_GLASS_PANE, 1, DyeColor.BLACK.getData());
@@ -47,25 +51,16 @@ public abstract class Menu {
         this.size = size;
         this.title = title;
 
+        this.buttons = new Button[this.size];
+
         this.registerMenu();
     }
-
-    /**
-     * Get the buttons to display in the menu.
-     * <p>
-     * These buttons will be converted
-     * into an {@link org.bukkit.inventory.ItemStack}
-     * and will be displayed inside of the menu.
-     *
-     * @return the list of buttons
-     */
-    public abstract List<Button> getButtons();
 
     /**
      * Update the menu for the player
      */
     public void updateMenu() {
-        this.updateMenu(this.getButtons());
+        this.updateMenu(this.buttons);
     }
 
     /**
@@ -73,28 +68,27 @@ public abstract class Menu {
      *
      * @param buttons the list of buttons to update it to
      */
-    public void updateMenu(List<Button> buttons) {
+    public void updateMenu(Button[] buttons) {
         final Inventory inventory = this.inventory == null
-                ? Bukkit.createInventory(null, this.size, ChatColor.translateAlternateColorCodes('&', this.title))
+                ? this.menuType.createInventory(this)
                 : this.inventory;
 
         this.clearMenu(inventory);
+        this.tick();
 
-        for (Button button : buttons) {
-            if (button.getIndex() < this.size) {
-                inventory.setItem(button.getIndex(), button.toItemStack());
-            } else {
-                Bukkit.getLogger().log(Level.WARNING, "Button was not added to menu (index was higher than the menu size, index=" + button.getIndex() + ", size=" + this.size + ")");
+        for (FillingType filler : this.fillers) {
+            final Button[] fillers = filler.fillMenu(this);
+
+            for(int index = 0; index < fillers.length; index++) {
+                if(fillers[index] != null) {
+                    inventory.setItem(index, fillers[index].toItemStack());
+                }
             }
         }
 
-        for (FillingType filler : this.fillers) {
-            for (Button button : filler.fillMenu(this, buttons)) {
-                if (button.getIndex() < this.size) {
-                    inventory.setItem(button.getIndex(), button.toItemStack());
-                } else {
-                    Bukkit.getLogger().log(Level.WARNING, "Button was not added to menu (index was higher than the menu size, index=" + button.getIndex() + ", size=" + this.size + ")");
-                }
+        for(int index = 0; index < buttons.length; index++) {
+            if (buttons[index] != null) {
+                inventory.setItem(index, buttons[index].toItemStack());
             }
         }
 
@@ -110,6 +104,14 @@ public abstract class Menu {
     }
 
     /**
+     * The method to get the buttons for the current inventory tick
+     * <p>
+     * Use {@code this.buttons[index] = Button} to assign
+     * a button to a slot.
+     */
+    public abstract void tick();
+
+    /**
      * Register the menu to the menu handler
      */
     public void registerMenu() {
@@ -123,6 +125,7 @@ public abstract class Menu {
      */
     public void redirect(Menu menu) {
         menu.updateMenu();
+        this.registerMenu();
     }
 
     /**
@@ -156,14 +159,16 @@ public abstract class Menu {
      * @param event the event called
      */
     public void click(InventoryClickEvent event) {
-        for (Button button : this.getButtons()) {
-            if(button.getIndex() == event.getSlot() && button.getClickAction() != null) {
-                button.getClickAction().accept(event);
-                return;
-            }
+        final Button button = this.buttons[event.getSlot()];
+
+        if (button == null) {
+            event.setCancelled(true);
+            return;
         }
 
-        event.setCancelled(true);
+        if (button.getClickAction() != null) {
+            button.getClickAction().accept(event);
+        }
     }
 
     /**

@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @Getter
 public class Button implements Cloneable {
 
-    private int index;
     private final Material material;
 
     private String displayName;
@@ -29,30 +28,18 @@ public class Button implements Cloneable {
      * @param index    the display slot of the button
      * @param material the icon of the button
      */
-    public Button(int index, Material material) {
+    public Button(Material material) {
         this.material = material;
-        this.index = index;
     }
 
     @Override
     public Button clone() {
-        return new Button(this.index, this.material)
+        return new Button(this.material)
                 .setDisplayName(this.getDisplayName())
                 .setAmount(this.getAmount())
                 .setClickAction(this.getClickAction())
                 .setLore(this.getLore())
                 .setData(this.getData());
-    }
-
-    /**
-     * Set the index of the button in the menu.
-     *
-     * @param index the index to set it to
-     * @return the current button instance
-     */
-    public Button setIndex(int index) {
-        this.index = index;
-        return this;
     }
 
     /**

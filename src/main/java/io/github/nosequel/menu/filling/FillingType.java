@@ -3,9 +3,6 @@ package io.github.nosequel.menu.filling;
 import io.github.nosequel.menu.Menu;
 import io.github.nosequel.menu.buttons.Button;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public enum FillingType {
 
     BORDER {
@@ -13,36 +10,23 @@ public enum FillingType {
          * Fill the slots inside of the menu with the
          * specified filling type.
          *
-         * @param menu    the menu to fill
-         * @param buttons the buttons which are currently used
+         * @param menu the menu to fill
          * @return the filling buttons
          */
         @Override
-        public List<Button> fillMenu(Menu menu, List<Button> buttons) {
-            final List<Button> fillers = new ArrayList<>();
+        public Button[] fillMenu(Menu menu) {
+            final Button[] buttons = new Button[menu.getSize()];
 
-            for(int i = 0; i < menu.getSize(); i++) {
-                boolean applicableSlot = true;
-
-                for (Button button : buttons) {
-                    if (button.getIndex() == i) {
-                        applicableSlot = false;
-                        break;
-                    }
-                }
-
-                if (applicableSlot) {
-                    if (i < 9 || i >= menu.getSize() - 9 || i % 9 == 0 || i % 9 == 8) {
-                        fillers.add(new Button(i, menu.getFillerType().getType())
-                                .setData(menu.getFillerType().getData().getData())
-                                .setDisplayName(" ")
-                                .setClickAction(event -> event.setCancelled(true))
-                        );
-                    }
+            for (int i = 0; i < menu.getSize(); i++) {
+                if (i < 9 || i >= menu.getSize() - 9 || i % 9 == 0 || i % 9 == 8) {
+                    buttons[i] = new Button(menu.getFillerType().getType())
+                            .setData(menu.getFillerType().getData().getData())
+                            .setDisplayName(" ")
+                            .setClickAction(event -> event.setCancelled(true));
                 }
             }
 
-            return fillers;
+            return buttons;
         }
     },
 
@@ -51,34 +35,22 @@ public enum FillingType {
          * Fill the slots inside of the menu with the
          * specified filling type.
          *
-         * @param menu    the menu to fill
-         * @param buttons the buttons which are currently used
+         * @param menu the menu to fill
          * @return the filling buttons
          */
         @Override
-        public List<Button> fillMenu(Menu menu, List<Button> buttons) {
-            final List<Button> fillers = new ArrayList<>();
+        public Button[] fillMenu(Menu menu) {
+            final Button[] buttons = new Button[menu.getSize()];
 
             for (int i = 0; i < menu.getSize(); i++) {
-                boolean applicableSlot = true;
+                buttons[i] = new Button(menu.getFillerType().getType())
+                        .setData(menu.getFillerType().getData().getData())
+                        .setDisplayName(" ")
+                        .setClickAction(event -> event.setCancelled(true));
 
-                for (Button button : buttons) {
-                    if (button.getIndex() == i) {
-                        applicableSlot = false;
-                        break;
-                    }
-                }
-
-                if (applicableSlot) {
-                    fillers.add(new Button(i, menu.getFillerType().getType())
-                            .setData(menu.getFillerType().getData().getData())
-                            .setDisplayName(" ")
-                            .setClickAction(event -> event.setCancelled(true))
-                    );
-                }
             }
 
-            return fillers;
+            return buttons;
         }
     };
 
@@ -86,10 +58,8 @@ public enum FillingType {
      * Fill the slots inside of the menu with the
      * specified filling type.
      *
-     * @param menu    the menu to fill
-     * @param buttons the buttons which are currently used
+     * @param menu the menu to fill
      * @return the filling buttons
      */
-    public abstract List<Button> fillMenu(Menu menu, List<Button> buttons);
-
+    public abstract Button[] fillMenu(Menu menu);
 }
