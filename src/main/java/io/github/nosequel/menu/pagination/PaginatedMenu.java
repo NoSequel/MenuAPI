@@ -5,11 +5,9 @@ import io.github.nosequel.menu.buttons.Button;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.ChatColor;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
 
 @Getter
 @Setter
@@ -32,8 +30,9 @@ public abstract class PaginatedMenu extends Menu {
      * @param title  the title to display at the top of the inventory
      * @param size   the size of the inventory
      */
-    public PaginatedMenu(Player player, String title, int size) {
+    public PaginatedMenu(Player player, String title, int size, int maxPages) {
         super(player, title, size);
+        this.buttons = new Button[size * maxPages];
     }
 
     /**

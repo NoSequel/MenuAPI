@@ -5,8 +5,6 @@ import io.github.nosequel.menu.filling.FillingType;
 import io.github.nosequel.menu.type.MenuType;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -28,7 +26,7 @@ public abstract class Menu {
     private final String title;
     private final int size;
 
-    public final Button[] buttons;
+    public Button[] buttons;
 
     // the inventory to use if the inventory already exists,
     // to avoid re-opening the inventory whenever updating.
