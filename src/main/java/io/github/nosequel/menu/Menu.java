@@ -75,13 +75,11 @@ public abstract class Menu {
 
         this.tick();
 
-        for (FillingType filler : this.fillers) {
-            final Button[] fillers = filler.fillMenu(this);
+        final Button[] fillerButtons = this.getFillerButtons();
 
-            for (int i = 0; i < fillers.length; i++) {
-                if (fillers[i] != null) {
-                    this.buttons[i] = fillers[i];
-                }
+        for (int i = 0; i < fillerButtons.length; i++) {
+            if (fillerButtons[i] != null) {
+                this.buttons[i] = fillerButtons[i];
             }
         }
 
@@ -100,6 +98,27 @@ public abstract class Menu {
 
         this.inventory = inventory;
         this.registerMenu();
+    }
+
+    /**
+     * Get the filler buttons for the menu
+     *
+     * @return the filler buttons
+     */
+    public Button[] getFillerButtons() {
+        final Button[] buttons = new Button[this.size];
+
+        for (FillingType filler : this.fillers) {
+            final Button[] fillers = filler.fillMenu(this);
+
+            for (int i = 0; i < fillers.length; i++) {
+                if (fillers[i] != null) {
+                    this.buttons[i] = fillers[i];
+                }
+            }
+        }
+
+        return buttons;
     }
 
     /**

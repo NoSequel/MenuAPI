@@ -2,6 +2,7 @@ package io.github.nosequel.menu.pagination;
 
 import io.github.nosequel.menu.Menu;
 import io.github.nosequel.menu.buttons.Button;
+import io.github.nosequel.menu.filling.FillingType;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.ChatColor;
@@ -92,6 +93,30 @@ public abstract class PaginatedMenu extends Menu {
         if (button.getClickAction() != null) {
             button.getClickAction().accept(event);
         }
+    }
+
+    /**
+     * Get the filler buttons for the menu
+     *
+     * @return the filler buttons
+     */
+    @Override
+    public Button[] getFillerButtons() {
+        final Button[] buttons = new Button[this.getSize()];
+
+        for (FillingType filler : this.getFillers()) {
+            final Button[] fillers = filler.fillMenu(this);
+
+            for (int i = 0; i < fillers.length; i++) {
+                if (fillers[i] != null) {
+                    for (int page = 0; page < this.maxPages; page++) {
+                        this.buttons[(this.maxPages * page) + i] = fillers[i];
+                    }
+                }
+            }
+        }
+
+        return buttons;
     }
 
     /**
