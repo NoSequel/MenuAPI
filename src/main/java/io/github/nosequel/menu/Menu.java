@@ -28,7 +28,7 @@ public abstract class Menu {
     private final String title;
     private final int size;
 
-    private final Button[] buttons;
+    public final Button[] buttons;
 
     // the inventory to use if the inventory already exists,
     // to avoid re-opening the inventory whenever updating.
