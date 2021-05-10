@@ -82,6 +82,7 @@ public abstract class PaginatedMenu extends Menu {
     @Override
     public void updateMenu() {
         this.updateMenu(this.getButtonsInRange());
+        this.updateMenu(this.getButtonsInRange());
     }
 
     /**
