@@ -72,7 +72,6 @@ public abstract class Menu {
                 : this.inventory;
 
         this.clearMenu(inventory);
-        this.tick();
 
         for (FillingType filler : this.fillers) {
             final Button[] fillers = filler.fillMenu(this);
@@ -83,6 +82,8 @@ public abstract class Menu {
                 }
             }
         }
+
+        this.tick();
 
         for(int index = 0; index < buttons.length; index++) {
             if (buttons[index] != null) {

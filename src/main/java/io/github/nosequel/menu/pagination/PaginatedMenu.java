@@ -24,8 +24,6 @@ public abstract class PaginatedMenu extends Menu {
     private int page = 1;
     private int maxPages;
 
-    private boolean showPageInTitle;
-
     /**
      * Constructor to make a new menu object
      *
@@ -65,15 +63,6 @@ public abstract class PaginatedMenu extends Menu {
     public void navigatePrevious() {
         this.page = Math.max(1, this.page - 1);
         this.updateMenu();
-    }
-
-    /**
-     * Get the title of the menu
-     *
-     * @return the title
-     */
-    public String getTitle() {
-        return this.title + (this.showPageInTitle ? ChatColor.YELLOW + " - " + page + "/" + this.maxPages : "");
     }
 
     /**
