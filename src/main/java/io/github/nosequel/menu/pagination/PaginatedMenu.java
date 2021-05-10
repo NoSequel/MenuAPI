@@ -22,6 +22,9 @@ public abstract class PaginatedMenu extends Menu {
             .setDisplayName(ChatColor.GREEN + "Next Page");
 
     private int page = 1;
+    private int maxPages;
+
+    private boolean showPageInTitle;
 
     /**
      * Constructor to make a new menu object
@@ -30,8 +33,21 @@ public abstract class PaginatedMenu extends Menu {
      * @param title  the title to display at the top of the inventory
      * @param size   the size of the inventory
      */
+    public PaginatedMenu(Player player, String title, int size) {
+        this(player, title, size, 16);
+    }
+
+    /**
+     * Constructor to make a new menu object
+     *
+     * @param player the player to create the menu for
+     * @param title  the title to display at the top of the inventory
+     * @param size   the size of the inventory
+     * @param maxPages the maximum amount of pages
+     */
     public PaginatedMenu(Player player, String title, int size, int maxPages) {
         super(player, title, size);
+        this.maxPages = maxPages;
         this.buttons = new Button[size * maxPages];
     }
 
@@ -49,6 +65,15 @@ public abstract class PaginatedMenu extends Menu {
     public void navigatePrevious() {
         this.page = Math.max(1, this.page - 1);
         this.updateMenu();
+    }
+
+    /**
+     * Get the title of the menu
+     *
+     * @return the title
+     */
+    public String getTitle() {
+        return this.title + (this.showPageInTitle ? ChatColor.YELLOW + " - " + page + "/" + this.maxPages : "");
     }
 
     /**

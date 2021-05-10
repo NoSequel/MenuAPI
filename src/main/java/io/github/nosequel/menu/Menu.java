@@ -23,7 +23,7 @@ public abstract class Menu {
     private final List<FillingType> fillers = new ArrayList<>();
 
     private final Player player;
-    private final String title;
+    public final String title;
     private final int size;
 
     public Button[] buttons;
