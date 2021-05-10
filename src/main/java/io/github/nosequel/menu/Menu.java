@@ -75,6 +75,16 @@ public abstract class Menu {
 
         this.tick();
 
+        for (FillingType filler : this.fillers) {
+            final Button[] fillers = filler.fillMenu(this);
+
+            for (int i = 0; i < fillers.length; i++) {
+                if (fillers[i] != null) {
+                    this.buttons[i] = fillers[i];
+                }
+            }
+        }
+
         for(int index = 0; index < buttons.length; index++) {
             if (buttons[index] != null) {
                 inventory.setItem(index, buttons[index].toItemStack());
@@ -123,9 +133,7 @@ public abstract class Menu {
      * @param type the new type to add
      */
     public void addFiller(FillingType type) {
-        final Button[] buttons = type.fillMenu(this);
-
-        System.arraycopy(buttons, 0, this.buttons, 0, buttons.length);
+        this.fillers.add(type);
     }
 
     /**
