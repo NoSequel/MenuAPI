@@ -15,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 @Setter
 public abstract class PaginatedMenu extends Menu {
 
-    private ItemStack paginationButtonType = new ItemStack(Material.CARPET, 1, DyeColor.GREEN.getWoolData());
     private NavigationPosition navigationPosition = NavigationPosition.TOP;
 
     private Button previousPageButton = new Button(Material.MELON)
@@ -51,15 +50,6 @@ public abstract class PaginatedMenu extends Menu {
     public void navigatePrevious() {
         this.page = Math.max(1, this.page - 1);
         this.updateMenu();
-    }
-
-    /**
-     * Get the type of the pagination button's icon
-     *
-     * @return the icon
-     */
-    public ItemStack getPaginationButtonType() {
-        return paginationButtonType;
     }
 
     /**
