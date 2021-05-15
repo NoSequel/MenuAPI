@@ -15,21 +15,34 @@ import java.util.stream.Collectors;
 public class Button implements Cloneable {
 
     private final Material material;
+    private final ItemMeta meta;
 
     private String displayName;
     private String[] lore;
 
     private Consumer<InventoryClickEvent> clickAction = event -> event.setCancelled(true);
 
-    private int amount = 1;
-    private byte data = 0;
+    private int amount;
+    private byte data;
 
     /**
-     * @param index    the display slot of the button
      * @param material the icon of the button
      */
     public Button(Material material) {
-        this.material = material;
+        this(new ItemStack(material));
+    }
+
+    /**
+     * Make a new {@link Button} object from an {@link ItemStack}
+     *
+     * @param itemStack the item stack to get it from
+     */
+    public Button(ItemStack itemStack) {
+        this.material = itemStack.getType();
+        this.meta = itemStack.getItemMeta();
+
+        this.data = itemStack.getData().getData();
+        this.amount = itemStack.getAmount();
     }
 
     @Override
@@ -104,9 +117,15 @@ public class Button implements Cloneable {
      */
     public ItemStack toItemStack() {
         final ItemStack item = new ItemStack(this.getMaterial(), this.getAmount(), this.getData());
-        final ItemMeta meta = item.getItemMeta();
+        final ItemMeta meta;
 
-        if (meta != null) {
+        if (this.meta == null) {
+            meta = item.getItemMeta();
+        } else {
+            meta = this.meta;
+        }
+
+        if (meta != null) { // it can STILL be null, some items don't have an item meta.
             if (this.getDisplayName() != null) {
                 meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', this.getDisplayName()));
             }
