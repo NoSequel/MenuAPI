@@ -19,31 +19,32 @@ public void onEnable() {
 ## Creating a new menu
 You have to make a class extending the Menu class (or PaginatedMenu), or make a new anonymous class, for example:
 ### Anonymous Class
+
 ```java
 import io.github.nosequel.menu.buttons.Button;
 import io.github.nosequel.menu.pagination.PaginatedMenu;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-final PaginatedMenu menu = new PaginatedMenu(player, "example", 18) {
-    
-    @Override
-    public List<Button> buttons = new ArrayList<>() {
-        final List<Button> butons = new ArrayList<>();
+class ExampleClass {
 
-        for (int i = 0; i < 27; i++) {
-            buttons.add(new Button(i, Material.ENDER_PEARL)
-            .setDisplayName("&aSlot: " + i)
-            .setClickAction(event -> event.setCancelled(true));
-        }
-        
-        return buttons;
+    public ExampleClass(Player player) {
+        final PaginatedMenu menu = new PaginatedMenu(player, "example", 18) {
+            @Override
+            public void tick() {
+                for (int i = 0; i < 27; i++) {
+                    this.buttons[i] = new Button(Material.ENDER_PEARL)
+                            .setDisplayName("&aSlot: " + i)
+                            .setClickAction(event -> event.setCancelled(true));
+                }
+            }
+        };
+
+        menu.updateMenu();
     }
-    
 }
-
-menu.updateMenu();
 ```
 
 ### Extending Menu
@@ -59,29 +60,16 @@ import java.util.List;
 public class ExampleMenu extends PaginatedMenu {
 
     public ExampleMenu(Player player) {
-        super(player, "example", 18);
+        super(player, "example", 18, 4);
     }
 
-    /**
-     * Get the buttons to display in the menu.
-     * <p>
-     * These buttons will be converted
-     * into an {@link ItemStack}
-     * and will be displayed inside of the menu.
-     *
-     * @return the list of buttons
-     */
     @Override
-    public List<Button> getButtons() {
-        final List<Button> buttons = new ArrayList<>();
-
-        for (int i = 0; i < 27; i++) {
-            buttons.add(new Button(i, Material.ENDER_PEARL)
+    public void tick() {
+        for(int i = 0; i < 27; i++) {
+            this.buttons[i] = new Button(Material.ENDER_PEARL)
                     .setDisplayName("&aSlot: " + i)
                     .setClickAction(event -> event.setCancelled(true));
         }
-
-        return buttons;
     }
 }
 ```
@@ -93,7 +81,8 @@ new ExampleMenu(player).updateMenu();
 ### Configuring Menu Pagination
 ```java
 PaginatedMenu#setNavigationPosition(NavigationPosition)
-PaginatedMenu#setPaginationButtonType(ItemStack)
+PaginatedMenu#setNextPageButton(Button)
+PaginatedMenu#setPreviousPageButton(Button)
 ```
 
 ### Configuring Menu Filling
