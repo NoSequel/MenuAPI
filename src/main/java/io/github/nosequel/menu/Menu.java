@@ -2,7 +2,6 @@ package io.github.nosequel.menu;
 
 import io.github.nosequel.menu.buttons.Button;
 import io.github.nosequel.menu.filling.FillingType;
-import io.github.nosequel.menu.type.MenuType;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.DyeColor;
