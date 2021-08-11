@@ -176,15 +176,19 @@ public abstract class Menu {
      * @param event the event called
      */
     public void click(InventoryClickEvent event) {
-        final Button button = this.buttons[event.getSlot()];
+        try {
+            final Button button = this.buttons[event.getSlot()];
 
-        if (button == null) {
-            event.setCancelled(true);
-            return;
-        }
+            if (button == null) {
+                event.setCancelled(true);
+                return;
+            }
 
-        if (button.getClickAction() != null) {
-            button.getClickAction().accept(event);
+            if (button.getClickAction() != null) {
+                button.getClickAction().accept(event);
+            }
+        } catch (IndexOutOfBoundsException ignored) {
+
         }
     }
 

@@ -82,16 +82,20 @@ public abstract class PaginatedMenu extends Menu {
      */
     @Override
     public void click(InventoryClickEvent event) {
-        final Button[] buttons = this.getButtonsInRange();
-        final Button button = buttons[event.getSlot()];
+        try {
+            final Button[] buttons = this.getButtonsInRange();
+            final Button button = buttons[event.getSlot()];
 
-        if (button == null) {
-            event.setCancelled(true);
-            return;
-        }
+            if (button == null) {
+                event.setCancelled(true);
+                return;
+            }
 
-        if (button.getClickAction() != null) {
-            button.getClickAction().accept(event);
+            if (button.getClickAction() != null) {
+                button.getClickAction().accept(event);
+            }
+        } catch (IndexOutOfBoundsException ignored) {
+
         }
     }
 
