@@ -34,7 +34,7 @@ public abstract class Menu {
     private MenuType menuType = MenuType.INVENTORY;
 
     // the button type used for filling the inventory slots
-    private ItemStack fillerType = new ItemStack(Material.STAINED_GLASS_PANE, 1, DyeColor.BLACK.getData());
+    private ItemStack fillerType;
 
     /**
      * Constructor to make a new menu object
