@@ -25,8 +25,13 @@ public enum NavigationPosition {
             });
 
             buttons[8] = menu.getNextPageButton().setClickAction(event -> {
-                menu.navigateNext();
-                event.setCancelled(true);
+                final int page = menu.getPage();
+                final int maxPages = menu.getButtons().length / (menu.getSize() + 9);
+
+                if (page != maxPages) {
+                    menu.navigateNext();
+                    event.setCancelled(true);
+                }
             });
 
             return buttons;
